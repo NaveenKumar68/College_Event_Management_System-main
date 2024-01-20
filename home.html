@@ -1,0 +1,226 @@
+<?php
+// Connect to the database
+$servername = "localhost";
+$username = "username"; // Replace with your database username
+$password = "password"; // Replace with your database password
+$dbname = "mydb"; // Replace with your database name
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch event data from database
+$sql = "SELECT event_name, event_image FROM events";
+$result = $conn->query($sql);
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Event Management System - Home</title>
+<style>
+/* Reset some default styles */
+body, h1, h2, h3, p, ul, li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+body {
+	font-family: Arial, sans-serif;
+}
+
+/* Header */
+header {
+	background-color: #2f2f2f;
+	color: #fff;
+	padding: 20px;
+}
+
+h1 {
+	font-size: 24px;
+}
+
+nav ul {
+	display: flex;
+}
+
+nav li {
+	margin-right: 20px;
+}
+
+nav a {
+	color: #fff;
+	text-decoration: none;
+	transition: color 0.3s;
+}
+
+nav a:hover {
+	color: #ccc;
+}
+
+/* Hero Section */
+.hero-image {
+	background-image: url('hero-image.jpg');
+	background-size: cover;
+	background-position: center;
+	height: 400px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+	color: #fff;
+}
+
+h2 {
+	font-size: 36px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+p {
+	font-size: 18px;
+	margin-bottom: 40px;
+	text-align: center;
+}
+
+a {
+	background-color: #fff;
+	color: #2f2f2f;
+	padding: 10px 20px;
+	font-size: 18px;
+	border-radius: 4px;
+	text-align: center;
+	text-decoration: none;
+	transition: background-color 0.3s;
+}
+
+a:hover {
+	background-color: #ccc;
+}
+
+/* Featured Events Section */
+.featured-events {
+	padding: 40px;
+	background-color: #f7f7f7;
+}
+
+.featured-events h2 {
+	font-size: 24px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.event-card {
+	width: 100%;
+	max-width: 300px;
+	margin: 0 auto;
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 4px;
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+	margin-bottom: 20px;
+}
+
+.event-card img {
+	width: 100%;
+	max-height: 200px;
+	object-fit: cover;
+	border-radius: 4px;
+	margin-bottom: 10px;
+}
+
+.event-card h3 {
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+
+.event-card p {
+	font-size: 14px;
+	margin-bottom: 20px;
+}
+
+.event-card a {
+	background-color: #2f2f2f;
+	color: #fff;
+	padding: 10px 20px;
+	font-size: 14px;
+	border-radius: 4px;
+	text-align: center;
+	text-decoration: none;
+	transition: background-color 0.3s;
+	display: block;
+}
+
+.event-card a:hover {
+	background-color: #3f3f3f;
+}
+
+/* Upcoming Events Section */
+.upcoming-events {
+	padding: 40px;
+	background-color: #fff;
+}
+
+.upcoming-events h2 {
+	font-size: 24px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+/* Footer */
+footer {
+	background-color: #2f2f2f;
+	color: #fff;
+	padding: 20px;
+	text-align: center;
+}
+
+</style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to Event Management System</h1>
+    <nav>
+      <ul>
+        <li><a href="home.html" class="active">Home</a></li>
+        <li><a href="upcoming-events.html">Upcoming Events</a></li>
+        <li><a href="featured-events.html">Featured Events</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
+      </ul>
+    </nav>
+  </header>
+  <section id="hero-section">
+    <h2>Discover Exciting Events Near You</h2>
+    <p>Find and book your favorite events with ease</p>
+    <a href="upcoming-events.html" class="cta-button">View Upcoming Events</a>
+  </section>
+  <section class="featured-events">
+    <h2>Featured Events</h2>
+    <div class="event-card">
+        <?php
+        // Loop through fetched event data and display event cards
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo '<div class="event-card">';
+                echo '<img src="' . $row["event_image"] . '" alt="' . $row["event_name"] . '">';
+                echo '<h3>' . $row["event_name"] . '</h3>';
+                echo '<p>Event description goes here</p>';
+                echo '<a href="#">Register</a>';
+                echo '</div>';
+            }
+        } else {
+            echo "No events found.";
+        }
+        ?>
+    </div>
+</section>
+  <footer>
+    <p>Contact us: info@example.com</p>
+  </footer>
+</body>
+</html>
